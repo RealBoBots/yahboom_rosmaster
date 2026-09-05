@@ -165,25 +165,41 @@ start_container() {
         run_args+=(-e LIBGL_ALWAYS_SOFTWARE=1)
     fi
 
-    local disp_args
-    disp_args="$(get_display_args)"
+    if [ -n "${DISPLAY:-}" ]; then
+        run_args+=(-e "DISPLAY=${DISPLAY}")
 
-    # shellcheck disable=SC2086
-    $ENGINE run "${run_args[@]}" $disp_args "$IMAGE" sleep infinity >/dev/null
+        if refresh_xauth; then
+            run_args+=(-e "XAUTHORITY=${X11_CONT_DIR}/Xauthority")
+        fi
+    fi
+
+    $ENGINE run "${run_args[@]}" "$IMAGE" sleep infinity >/dev/null
     info "Container started. Workspace mounted at: $CONT_WS"
 }
 
 exec_in_container() {
     require_running
     local tty_args=(-i)
+    
     if [ -t 0 ] && [ -t 1 ]; then
         tty_args+=(-t)
     fi
-    local disp_args
-    disp_args="$(get_display_args)"
-    # shellcheck disable=SC2086
-    $ENGINE exec "${tty_args[@]}" -u "$CONTAINER_USER" -w "$CONT_WS" \
-        $disp_args "$CONTAINER_NAME" "$@"
+
+    local exec_args=(
+        "${tty_args[@]}"
+        -u "$CONTAINER_USER"
+        -w "$CONT_WS"
+        )
+
+    if [ -n "${DISPLAY:-}" ]; then
+        exec_args+=(-e "DISPLAY=${DISPLAY}")
+
+        if refresh_xauth; then
+            exec_args+=(-e "XAUTHORITY=${X11_CONT_DIR}/Xauthority")
+        fi
+    fi
+
+    $ENGINE exec "${exec_args[@]}" "$CONTAINER_NAME" "$@"
 }
 
 cmd="${1:-}"
