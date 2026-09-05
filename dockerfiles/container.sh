@@ -113,13 +113,21 @@ get_display_args() {
 install_dependencies() {
     require_running
     info "Installing workspace dependencies with rosdep..."
-    exec_in_container bash -c \
-        "source /opt/ros/humble/setup.bash && \
-         if [ ! -f /etc/ros/rosdep/sources.list.d/20-default.list ]; then \
-           sudo rosdep init; \
-         fi && \
-         rosdep update && \
-         rosdep install --from-paths . --ignore-src -r -y --rosdistro humble"
+
+    exec_in_container bash -c "
+        source /opt/ros/humble/setup.bash &&
+        sudo apt-get update &&
+        if [ ! -f /etc/ros/rosdep/sources.list.d/20-default.list ]; then
+            sudo rosdep init
+        fi &&
+        rosdep update &&
+        rosdep install \
+            --from-paths . \
+            --ignore-src \
+            -r \
+            -y \
+            --rosdistro humble
+    "
 }
 
 start_container() {
