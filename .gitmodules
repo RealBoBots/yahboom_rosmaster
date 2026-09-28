@@ -1,0 +1,3 @@
+[submodule "src/jar_workshops"]
+	path = src/jar_workshops
+	url = https://github.com/RealBoBots/jar_workshops.git
