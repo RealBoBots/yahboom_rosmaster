@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
+  <name>jar_bringup</name>
+  <version>0.1.0</version>
+  <description>
+    Club-side bringup for the Challenge JAR 2026 (AIR Club UdeSA) ROSMASTER X3.
+    Wraps the read-only yahboom_rosmaster fork without modifying it: selects the
+    Gazebo Fortress render engine per host, and provides teleoperation and a
+    motion validation probe.
+  </description>
+  <maintainer email="bongiovanni.9@gmail.com">Emiliano Bongiovanni</maintainer>
+  <license>Apache-2.0</license>
+
+  <exec_depend>launch</exec_depend>
+  <exec_depend>launch_ros</exec_depend>
+  <exec_depend>rclpy</exec_depend>
+  <exec_depend>geometry_msgs</exec_depend>
+  <exec_depend>nav_msgs</exec_depend>
+  <exec_depend>ament_index_python</exec_depend>
+  <exec_depend>yahboom_rosmaster_bringup</exec_depend>
+  <exec_depend>yahboom_rosmaster_gazebo</exec_depend>
+  <exec_depend>teleop_twist_keyboard</exec_depend>
+
+  <test_depend>ament_copyright</test_depend>
+  <test_depend>ament_flake8</test_depend>
+  <test_depend>ament_pep257</test_depend>
+  <test_depend>python3-pytest</test_depend>
+
+  <export>
+    <build_type>ament_python</build_type>
+  </export>
+</package>

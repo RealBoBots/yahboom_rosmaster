@@ -1,0 +1,33 @@
+# Mapeo de joystick para la base mecanum del ROSMASTER X3.
+#
+# Layout tipo Xbox, que es el mas comun. Un mando PlayStation usa otros
+# indices: mira los ejemplos en /opt/ros/humble/share/teleop_twist_joy/config/
+# o corre `ros2 topic echo /joy` y fijate que indice se mueve con cada stick.
+#
+# Lo que distingue a un mecanum de un diferencial es axis_linear.y: el
+# desplazamiento lateral es un eje propio, no una rotacion seguida de un avance.
+teleop_twist_joy_node:
+  ros__parameters:
+    axis_linear:
+      x: 1          # stick izquierdo vertical  -> adelante / atras
+      y: 0          # stick izquierdo horizontal -> lateral izq / der
+    scale_linear:
+      x: 0.25       # m/s, igual que el teleop de teclado
+      y: 0.25
+    scale_linear_turbo:
+      x: 0.60
+      y: 0.60
+
+    axis_angular:
+      yaw: 3        # stick derecho horizontal -> rotacion
+    scale_angular:
+      yaw: 1.0
+    scale_angular_turbo:
+      yaw: 2.0
+
+    # Hombre-muerto: sin mantener LB no se mueve. Es intencional, no comodidad:
+    # el MecanumDrive de Fortress no tiene timeout propio, asi que soltar el
+    # boton es la unica garantia de que el robot para.
+    enable_button: 4          # LB
+    enable_turbo_button: 5    # RB
+    require_enable_button: true
